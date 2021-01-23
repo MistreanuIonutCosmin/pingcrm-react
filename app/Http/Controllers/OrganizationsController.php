@@ -45,6 +45,18 @@ class OrganizationsController extends Controller
         return Redirect::route('organizations')->with('success', 'Organization created.');
     }
 
+    public function storeFromModal()
+    {
+        Auth::user()->account->organizations()->create(
+            Request::validate([
+                'name' => ['required', 'max:100'],
+                'email' => ['nullable', 'max:50', 'email'],
+            ])
+        );
+
+        return Redirect::back()->with('success', 'Organization created.');
+    }
+
     public function edit(Organization $organization)
     {
         return Inertia::render('Organizations/Edit', [

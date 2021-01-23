@@ -1,14 +1,24 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Helmet from 'react-helmet';
 import { InertiaLink, usePage } from '@inertiajs/inertia-react';
 import Layout from '@/Shared/Layout';
 import Icon from '@/Shared/Icon';
 import SearchFilter from '@/Shared/SearchFilter';
 import Pagination from '@/Shared/Pagination';
+import SmallButton from "@/Shared/SmallButton";
+import ConfirmModal from "@/Shared/Modals/ConfirmModal";
+import {Inertia} from "@inertiajs/inertia";
 
 const Organizations = () => {
   const { organizations } = usePage().props;
   const { links, data } = organizations;
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [organizationId, setOrganizationId] = useState(null);
+
+  let onConfirm = () => {
+      Inertia.delete(route('organizations.destroy', organizationId));
+  }
+
   return (
     <div>
       <Helmet title="Organizations" />
@@ -74,15 +84,26 @@ const Organizations = () => {
                         {phone}
                       </InertiaLink>
                     </td>
-                    <td className="border-t w-px">
+                    <td className="border-t w-24 flex flex-row-reverse">
+                      <SmallButton
+                            onClick={()=> {
+                                 setOrganizationId(id);
+                                 setConfirmOpen(true);
+                             }}>
+                        <Icon
+                            name="trash"
+                            className="w-6 h-6 text-red-400 fill-current"
+                        />
+                      </SmallButton>
+
                       <InertiaLink
                         tabIndex="-1"
                         href={route('organizations.edit', id)}
-                        className="px-4 flex items-center"
+                        className="px-4 mt-3"
                       >
                         <Icon
                           name="cheveron-right"
-                          className="block w-6 h-6 text-gray-400 fill-current"
+                          className="w-6 h-6 text-gray-400 fill-current"
                         />
                       </InertiaLink>
                     </td>
@@ -101,6 +122,15 @@ const Organizations = () => {
         </div>
         <Pagination links={links} />
       </div>
+
+      <ConfirmModal
+        title="Delete item?"
+        open={confirmOpen}
+        onClose={() => setConfirmOpen(false)}
+        onConfirm={onConfirm}
+      >
+        Are you sure you want to delete this item?
+      </ConfirmModal>
     </div>
   );
 };
