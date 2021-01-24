@@ -93,7 +93,7 @@ const Modal = () => {
                 </ConfirmModal>
 
                 <ModalWithButtons
-                    title="Create"
+                    title="Create Organization"
                     open={dialogIsOpen}
                     onClose={() => setDialogIsOpen(false)}
                     onConfirm={() => setDialogIsOpen(false)}
