@@ -62,4 +62,5 @@ Route::get('modals')->name('modals')->uses('ModalController@index')->middleware(
 Route::post('organizationsFromModal')->name('organizations.storeFromModal')->uses('OrganizationsController@storeFromModal')->middleware('auth');
 
 //TODO
-Route::get('todos')->name('todos')->uses('TodoController@index')->middleware('auth');
+Route::get('todos')->name('todos')->uses('ToDoController@index')->middleware('auth');
+Route::post('storeFromToDoModal')->name('todos.storeFromToDoModal')->uses('ToDoController@storeFromToDoModal')->middleware('auth');

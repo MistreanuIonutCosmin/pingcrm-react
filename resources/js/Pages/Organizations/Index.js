@@ -11,6 +11,7 @@ import {Inertia} from "@inertiajs/inertia";
 
 const Organizations = () => {
   const { organizations } = usePage().props;
+//   console.log(organizations)
   const {
     data,
     meta: { links }

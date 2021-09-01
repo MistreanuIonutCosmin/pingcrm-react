@@ -1,41 +1,122 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Helmet from 'react-helmet';
-import { InertiaLink } from '@inertiajs/inertia-react';
+import { InertiaLink, usePage } from '@inertiajs/inertia-react';
 import Layout from '@/Shared/Layout';
+import Icon from '@/Shared/Icon';
+import SearchFilter from '@/Shared/SearchFilter';
+import CreateToDo from './CreateToDo';
+import Pagination from '@/Shared/Pagination';
+import SmallButton from "@/Shared/SmallButton";
+import ConfirmModal from "@/Shared/Modals/ConfirmModal";
+import {Inertia} from "@inertiajs/inertia";
 
 const ToDos = () => {
+  const { organizations } = usePage().props;
+  const {
+    data,
+    meta: { links }
+  } = organizations;
+
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [organizationId, setOrganizationId] = useState(null);
+
+  let onConfirm = () => {
+      Inertia.delete(route('organizations.destroy', organizationId));
+  }
+
   return (
     <div>
-      <Helmet>
-        <title>ToDos</title>
-      </Helmet>
-      <h1 className="mb-8 text-3xl font-bold">ToDos</h1>
-      <p className="mb-12 leading-normal">
-        Hey there! Welcome to Ping CRM, a demo app designed to help illustrate
-        how
-        <a
-          className="mx-1 text-indigo-600 underline hover:text-orange-500"
-          href="https://inertiajs.com"
-        >
-          Inertia.js
-        </a>
-        works with
-        <a
-          className="ml-1 text-indigo-600 underline hover:text-orange-500"
-          href="https://reactjs.org/"
-        >
-          React
-        </a>
-        .
-      </p>
+      <Helmet title="Organizations" />
       <div>
-        <InertiaLink className="mr-1 btn-indigo" href="/500">
-          500 error
-        </InertiaLink>
-        <InertiaLink className="btn-indigo" href="/404">
-          404 error
-        </InertiaLink>
+        <h1 className="mb-8 text-3xl font-bold">Pomodoro Focus</h1>
+        <div className="flex items-center justify-between mb-6">
+          <SearchFilter />
+          {/* <InertiaLink
+            className="btn-indigo focus:outline-none"
+            href={route('organizations.create')}
+          >
+            <span>Create</span>
+            <span className="hidden md:inline"> Organization</span>
+          </InertiaLink> */}
+          <CreateToDo />
+
+        </div>
+        <div className="overflow-x-auto bg-white rounded shadow">
+          <table className="w-full whitespace-nowrap">
+            <thead>
+              <tr className="font-bold text-left">
+                <th className="px-6 pt-5 pb-4">Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data?.map(({ id, name, city, phone, deleted_at }) => {
+                return (
+                  <tr
+                    key={id}
+                    className="hover:bg-gray-100 focus-within:bg-gray-100"
+                  >
+                    <td className="border-t">
+                      <InertiaLink
+                        href={route('organizations.edit', id)}
+                        className="flex items-center px-6 py-4 focus:text-indigo-700 focus:outline-none"
+                      >
+                        {name}
+                        {deleted_at && (
+                          <Icon
+                            name="trash"
+                            className="flex-shrink-0 w-3 h-3 ml-2 text-gray-400 fill-current"
+                          />
+                        )}
+                      </InertiaLink>
+                    </td>
+
+                    <td className="border-t w-24 flex flex-row-reverse">
+                      <SmallButton
+                            onClick={()=> {
+                                 setOrganizationId(id);
+                                 setConfirmOpen(true);
+                             }}>
+                        <Icon
+                            name="trash"
+                            className="w-6 h-6 text-red-400 fill-current"
+                        />
+                      </SmallButton>
+
+                      <InertiaLink
+                        tabIndex="-1"
+                        href={route('organizations.edit', id)}
+                        className="px-4 mt-3"
+                      >
+                        <Icon
+                          name="cheveron-right"
+                          className="w-6 h-6 text-gray-400 fill-current"
+                        />
+                      </InertiaLink>
+                    </td>
+                  </tr>
+                );
+              })}
+              {data.length === 0 && (
+                <tr>
+                  <td className="px-6 py-4 border-t" colSpan="4">
+                    No organizations found.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+        <Pagination links={links} />
       </div>
+
+      <ConfirmModal
+        title="Delete item?"
+        open={confirmOpen}
+        onClose={() => setConfirmOpen(false)}
+        onConfirm={onConfirm}
+      >
+        Are you sure you want to delete this item?
+      </ConfirmModal>
     </div>
   );
 };
