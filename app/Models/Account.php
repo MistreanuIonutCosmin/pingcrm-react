@@ -18,4 +18,10 @@ class Account extends Model
     {
         return $this->hasMany(Contact::class);
     }
+
+    public function todos()
+    {
+        return $this->hasMany(ToDo::class);
+    }
+
 }

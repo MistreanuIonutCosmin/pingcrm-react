@@ -22,6 +22,11 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'owner' => 'boolean',
     ];
 
+    public function todos()
+    {
+        return $this->hasMany(todos::class);
+    }
+
     public function account()
     {
         return $this->belongsTo(Account::class);

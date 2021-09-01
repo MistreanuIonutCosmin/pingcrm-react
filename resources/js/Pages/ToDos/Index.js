@@ -11,17 +11,17 @@ import ConfirmModal from "@/Shared/Modals/ConfirmModal";
 import {Inertia} from "@inertiajs/inertia";
 
 const ToDos = () => {
-  const { organizations } = usePage().props;
+  const { todos } = usePage().props;
   const {
     data,
     meta: { links }
-  } = organizations;
+  } = todos;
 
   const [confirmOpen, setConfirmOpen] = useState(false);
-  const [organizationId, setOrganizationId] = useState(null);
+  const [todoId, setTodoId] = useState(null);
 
   let onConfirm = () => {
-      Inertia.delete(route('organizations.destroy', organizationId));
+      Inertia.delete(route('todos.destroy', todoId));
   }
 
   return (
@@ -73,7 +73,7 @@ const ToDos = () => {
                     <td className="border-t w-24 flex flex-row-reverse">
                       <SmallButton
                             onClick={()=> {
-                                 setOrganizationId(id);
+                                 setTodoId(id);
                                  setConfirmOpen(true);
                              }}>
                         <Icon

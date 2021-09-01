@@ -64,3 +64,4 @@ Route::post('organizationsFromModal')->name('organizations.storeFromModal')->use
 //TODO
 Route::get('todos')->name('todos')->uses('ToDoController@index')->middleware('auth');
 Route::post('storeFromToDoModal')->name('todos.storeFromToDoModal')->uses('ToDoController@storeFromToDoModal')->middleware('auth');
+Route::delete('todos/{todo}')->name('todos.destroy')->uses('ToDoController@destroy')->middleware('auth');
