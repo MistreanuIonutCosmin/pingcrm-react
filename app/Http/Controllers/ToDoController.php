@@ -43,4 +43,15 @@ class ToDoController extends Controller
         // https://inertiajs.com/redirects "303 response code"
         return Redirect::back(303)->with('success', 'ToDo deleted.');
     }
+
+    public function toggleComplete(ToDo $todo)
+    {
+        $todo->completed = !$todo->completed;
+        $todo->save();
+
+        // https://inertiajs.com/redirects "303 response code"
+        return Redirect::back(303)->with('success', 'ToDo status changed.');
+    }
 }
+
+

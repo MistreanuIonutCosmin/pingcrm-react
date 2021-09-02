@@ -49,25 +49,28 @@ const ToDos = () => {
               </tr>
             </thead>
             <tbody>
-              {data?.map(({ id, name, city, phone, deleted_at }) => {
+              {data?.map(({ id, name, completed, phone, deleted_at }) => {
                 return (
                   <tr
                     key={id}
                     className="hover:bg-gray-100 focus-within:bg-gray-100"
                   >
                     <td className="border-t">
-                      <InertiaLink
-                        href={route('organizations.edit', id)}
-                        className="flex items-center px-6 py-4 focus:text-indigo-700 focus:outline-none"
-                      >
-                        {name}
+                      <div className="flex items-center px-6 py-4 focus:text-indigo-700 focus:outline-none">
+                        <InertiaLink
+                            href={route('todos.toggleComplete', id)}
+                            className="flex items-center px-6 py-4 focus:text-indigo-700 focus:outline-none"
+                        >
+                            <input type="checkbox" id="scales" name="scales" defaultChecked={completed == 1} />
+                        </InertiaLink>
+                        <span style={{ textDecorationLine: completed == 1 ? 'line-through' : 'none' }}>{name}</span>
                         {deleted_at && (
                           <Icon
                             name="trash"
                             className="flex-shrink-0 w-3 h-3 ml-2 text-gray-400 fill-current"
                           />
                         )}
-                      </InertiaLink>
+                      </div>
                     </td>
 
                     <td className="border-t w-24 flex flex-row-reverse">
@@ -82,16 +85,7 @@ const ToDos = () => {
                         />
                       </SmallButton>
 
-                      <InertiaLink
-                        tabIndex="-1"
-                        href={route('organizations.edit', id)}
-                        className="px-4 mt-3"
-                      >
-                        <Icon
-                          name="cheveron-right"
-                          className="w-6 h-6 text-gray-400 fill-current"
-                        />
-                      </InertiaLink>
+
                     </td>
                   </tr>
                 );

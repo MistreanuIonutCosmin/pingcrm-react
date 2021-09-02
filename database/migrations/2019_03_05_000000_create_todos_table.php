@@ -12,6 +12,7 @@ class CreateToDosTable extends Migration
             $table->increments('id');
             $table->integer('account_id')->index();
             $table->string('name', 500);
+            $table->boolean('completed', false)->default(false);
             $table->timestamps();
             $table->softDeletes();
         });
